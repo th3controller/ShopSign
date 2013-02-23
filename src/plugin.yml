@@ -1,0 +1,5 @@
+name: ShopSign
+main: us.th3controller.shopsign.ShopSign
+version: 1.0.0
+author: th3controller
+depend: [Vault]
