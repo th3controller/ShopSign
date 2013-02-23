@@ -3,6 +3,7 @@ package us.th3controller.shopsign;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,9 +38,20 @@ public class ShopSignListener implements Listener {
 			String[] data = line3.split(":");
 			
 			Integer buy = Integer.parseInt(data[0]);
-			player.getInventory().addItem(new ItemStack(Material.getMaterial(line4.toUpperCase()), line2));
-			ShopSign.econ.withdrawPlayer(player.getName(), buy);
-			player.sendMessage(ChatColor.GREEN+"You bought "+getLine2+" "+line4+" for "+buy+" "+ShopSign.econ.currencyNamePlural());
+			
+			int x = event.getClickedBlock().getX();
+			int y = event.getClickedBlock().getY();
+			int z = event.getClickedBlock().getZ();
+			
+			if(clickblock.getWorld().getBlockAt(x, y - 1, z).getType() == Material.CHEST) {
+				Chest chest = (Chest)clickblock.getWorld().getBlockAt(x, y - 1, z).getState();
+				if(chest.getBlockInventory().containsAtLeast(new ItemStack(Material.getMaterial(line4.toUpperCase())), line2)) {
+					chest.getBlockInventory().removeItem(new ItemStack(Material.getMaterial(line4.toUpperCase()), line2));
+					player.getInventory().addItem(new ItemStack(Material.getMaterial(line4.toUpperCase()), line2));
+					ShopSign.econ.withdrawPlayer(player.getName(), buy);
+					player.sendMessage(ChatColor.GREEN+"You bought "+getLine2+" "+line4+" for "+buy+" "+ShopSign.econ.currencyNamePlural());
+				}
+			}
 		}
 		if(clickblock != null && clickblock.getType() == Material.SIGN_POST && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Player player = event.getPlayer();
