@@ -18,6 +18,7 @@ public class ShopSign extends JavaPlugin {
 	public void lm(String msg){
 		log.info("[ShopSign] " + msg);
 	}
+	@Override
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(new ShopSignListener(this), this);
 		pdfile = getDescription();
@@ -38,6 +39,7 @@ public class ShopSign extends JavaPlugin {
 		lm("Running version "+pdfile.getVersion());
 		lm("GNU General Public License version 3 (GPLv3)");
 	}
+	@Override
 	public void onDisable() {
 		lm("Successfully terminated the plugin!");
 	}
